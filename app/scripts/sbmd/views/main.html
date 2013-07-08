@@ -1,0 +1,157 @@
+<div class="row-fluid">
+    <div class="span8">
+        <div ng-show="setupRunning">
+            <h2>Session begins in {{formatRemainingTime(remainingSetupTime)}}</h2>
+        </div>
+        <div ng-show="sessionRunning">
+            <h2>{{formatRemainingTime(remainingSessionTime)}}</h2>
+        </div>
+        <!--
+        <div class="well webcam" ng-transclude on-stream="onStream(stream, video)" on-error="onError(err)" on-streaming="onSuccess(video)" placeholder="Waiting on webcam...">
+
+        </div>
+        -->
+        <div class="well">
+            <div class="video-content">
+                <webcam on-stream="onStream(stream,video)"
+                        on-access-denied="onError(err)"
+                        on-streaming="onSuccess(video)"
+                        on-movement="onMovement()"
+                        placeholder="'app/img/ajax-loader.gif'" width="480" height="320">
+                </webcam>
+            </div>
+        </div>
+
+    </div>
+    <div class="span4">
+        <form>
+            <button class="btn btn-large btn-primary" ng-click="toggleSession()">{{getSessionButtonText()}}</button>
+            <br /><br />
+            <div class="accordion" id="settings" ng-show="!sessionRunning">
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#settings"
+                           href="#collapseOne">
+                            Session Setup
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="accordion-body collapse in">
+                        <div class="accordion-inner">
+                            <label>Time in MINUTES until the release method will be activated:</label>
+                            <input type="text" ng-model="minutesUntilRelease"/>
+
+                            <label>Release API URL</label>
+                            <div class="input-append">
+                                <input type="text" ng-model="releaseApiUrl">
+                                <button class="btn btn-danger" type="button" ng-click="triggerRelease()">Test</button>
+                            </div>
+
+                            <label>Delay in MINUTES before starting the session:</label>
+                            <input type="text" ng-model="minutesUntilStart"/>
+
+                            <label class="checkbox">
+                                <input type="checkbox" ng-model="beepDuringCountdown" /> Beep during the countdown?
+                            </label>
+
+                            <label class="checkbox">
+                                <input type="checkbox" ng-model="showRemainingSessionTime">Show remaining time during the session?
+                            </label>
+
+                            <label class="checkbox">
+                                <input type="checkbox" ng-model="randomTimePlay" /> Random time play?
+                            </label>
+
+                            <div ng-show="randomTimePlay">
+                                <label>Min Random Time:</label>
+                                <input type="text" ng-model="minRandomTime" />
+
+                                <label>Max Random Time:</label>
+                                <input type="text" ng-model="maxRandomTime" />
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#settings"
+                           href="#collapseTwo">
+                            Movement
+                        </a>
+                    </div>
+                    <div id="collapseTwo" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <label>Movement sensitivity</label>
+                            <input type="text" ng-model="movementSensivity" />
+                            <label>Minutes that will be added to the countdown when you move:</label>
+                            <input type="text" ng-model="minutesToAddWhenMove" />
+                            <label>Movements allowed before teasing and adding time to the countdown:</label>
+                            <input type="text" ng-model="movementsBeforeAddedTime" />
+                            <label>Movement teasing API URL</label>
+                            <div class="input-append">
+                                <input type="text" ng-model="movementTeasingApiUrl">
+                                <button class="btn" type="button" ng-click="triggerMovementTease()">Test</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#settings"
+                           href="#collapseThree">
+                            Sound Teasing
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <label class="checkbox">
+                                <input type="checkbox" ng-model="useSoundTeasing" />Use sound teasing?
+                            </label>
+                            <div ng-show="useSoundTeasing">
+                                <label>Sound sensitivity</label>
+                                <input type="text" ng-model="soundSensitivity" />
+                                <label>Minutes that will be added to the countdown when you make a noise:</label>
+                                <input type="text" ng-model="minutesToAddWhenNoise" />
+                                <label>Sound teasing API URL</label>
+                                <div class="input-append">
+                                    <input type="text" ng-model="soundTeasingApiUrl" />
+                                    <button class="btn" type="button" ng-click="triggerSoundTease()">Test</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#settings"
+                           href="#collapseFour">
+                            Random Teasing
+                        </a>
+                    </div>
+                    <div id="collapseFour" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <label class="checkbox">
+                                <input type="checkbox" ng-model="useRandomTease" />Use ransom teasing?
+                            </label>
+                            <div ng-show="useRandomTease">
+                                <label>Probability of being teased</label>
+                                <input type="text" ng-model="teaseProbability" />
+                                <label>Random teasing API URL</label>
+                                <div class="input-append">
+                                    <input type="text" ng-model="randomTeasingApiUrl" />
+                                    <button class="btn" type="button" ng-click="triggerRandomTease()">Test</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<embed src="app/sounds/beep-8.wav" autostart="false" width="0" height="0" id="beep" enablejavascript="true" />
